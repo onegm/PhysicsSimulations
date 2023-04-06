@@ -17,9 +17,9 @@ public class Controller implements Initializable {
     @FXML
     Pane pane;
     @FXML
-    Slider redSpeedSlider, blueSpeedSlider;
+    Slider redSpeedSlider, blueSpeedSlider, redAccSlider, blueAccSlider;
     @FXML
-    Label redSpeedLabel, blueSpeedLabel;
+    Label redSpeedLabel, blueSpeedLabel, redAccLabel, blueAccLabel;
 
     private Car redCar, blueCar;
 
@@ -42,6 +42,12 @@ public class Controller implements Initializable {
 
         redCar.setSpeedSlider(redSpeedSlider);
         blueCar.setSpeedSlider(blueSpeedSlider);
+
+        redCar.setAccLabel(redAccLabel);
+        blueCar.setAccLabel(blueAccLabel);
+
+        redCar.setAccSlider(redAccSlider);
+        blueCar.setAccSlider(blueAccSlider);
 
     }
 

@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class Car {
     private Rectangle car;
-    private Slider speedSlider;
-    private Label speedLabel;
+    private Slider speedSlider, accSlider;
+    private Label speedLabel, accLabel;
 
     private double x, y,
             speedX, speedY,
@@ -31,8 +31,8 @@ public class Car {
         pane = (AnchorPane) car.getParent();
     }
 
-    public void setSpeedSlider(Slider sliderNode){
-        speedSlider = sliderNode;
+    public void setSpeedSlider(Slider slider){
+        speedSlider = slider;
         speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -41,6 +41,18 @@ public class Car {
         });
 
         setSpeed(speedSlider.getValue(), 0);
+    }
+
+    public void setAccSlider(Slider slider){
+        accSlider = slider;
+        accSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                setAcc(accSlider.getValue(), 0);
+            }
+        });
+
+        setAcc(accSlider.getValue(), 0);
     }
 
     public void update(){
@@ -68,22 +80,26 @@ public class Car {
         speedLabel.setText(Math.round(speedX) + " m/s");
     }
 
+    public void setAccLabel(Label label){
+        accLabel = label;
+        accLabel.setText(Math.round(accX) + " m/s^2");
+    }
+
     public void setPos(double x, double y){
         this.x = x;
         this.y = y;
         update();
     }
 
-    public void setAccX(double accX) {
+    public void setAcc(double accX, double accY) {
         this.accX = accX;
-    }
-
-    public void setAccY(double accY) {
         this.accY = accY;
+        accLabel.setText(Math.round(accX) + " m/s^2");
     }
 
     public void reset(){
         setPos(0, 0);
+        setSpeed(speedSlider.getValue(), 0);
         pane.getChildren().removeAll(marks);
         marks = new ArrayList<>();
     }
