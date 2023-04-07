@@ -1,6 +1,7 @@
 package kinematics;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -10,6 +11,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller implements Initializable {
     @FXML
@@ -23,12 +26,16 @@ public class Controller implements Initializable {
 
     private Car redCar, blueCar;
 
-    private int lastUpdatedTime;
+    private  Timer timer;
+    private TimerTask timerTask;
+    private long lastMarkTime, timeSinceLastMark;
 
-    private final AnimationTimer timer = new AnimationTimer() {
+    private int lastFrameTime;
+
+    private final AnimationTimer animationTimer = new AnimationTimer() {
         @Override
         public void handle(long l) {
-            animate(l);
+            animate();
         }
     };
 
@@ -49,32 +56,58 @@ public class Controller implements Initializable {
         redCar.setAccSlider(redAccSlider);
         blueCar.setAccSlider(blueAccSlider);
 
+        timer = new Timer();
     }
 
-    public void animate(long time){
+    public void animate(){
 
-        int timeNow = (int) Math.round(time / 1_000_000.0);
-        int elapsedTime = timeNow - lastUpdatedTime;
+        int timeNow = (int) (System.currentTimeMillis() % 100_000);
+        int elapsedTime = timeNow - lastFrameTime;
         redCar.move(elapsedTime);
         blueCar.move(elapsedTime);
 
-        if(timeNow % 1000 < 15 || timeNow%1000 > 985 ){
-            redCar.mark();
-            blueCar.mark();
-        }
-        lastUpdatedTime = timeNow;
+        lastFrameTime = timeNow;
+
+        timeSinceLastMark = System.currentTimeMillis() - lastMarkTime;
     }
 
-    public void startTimer(){
-        lastUpdatedTime = (int) Math.round(System.nanoTime() / 1_000_000.0);
-        timer.start();
+    public void startAnimation(){
+        lastFrameTime = (int) (System.currentTimeMillis()  % 100_000);
+        animationTimer.start();
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    //update UI thread from here.
+                    redCar.mark();
+                    blueCar.mark();
+                    lastMarkTime = System.currentTimeMillis();
+                });
+            }
+        };
+
+        timer.scheduleAtFixedRate(timerTask, 1000 - timeSinceLastMark, 1000);
     }
 
-    public void stopTimer(){timer.stop();}
+    public void pauseAnimation(){
+        animationTimer.stop();
+        timerTask.cancel();
+    }
 
-    public void reset(){
+    public void resetAnimation(){
         redCar.reset();
         blueCar.reset();
-        timer.stop();
+        animationTimer.stop();
+        timerTask.cancel();
+        timeSinceLastMark = 0;
     }
+
+    public void shutDown(){
+        animationTimer.stop();
+        timer.cancel();
+        timer.purge();
+    }
+
+
 }

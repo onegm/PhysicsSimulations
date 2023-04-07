@@ -56,9 +56,9 @@
                                                 <Cursor fx:constant="CLOSED_HAND" />
                                              </cursor>
                                           </Slider>
-                                          <Button fx:id="startButton" mnemonicParsing="false" onAction="#startTimer" prefHeight="25.0" prefWidth="276.0" text="Start" GridPane.rowIndex="3" />
-                                          <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopTimer" prefHeight="25.0" prefWidth="227.0" text="Stop" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Button fx:id="resetButton" mnemonicParsing="false" onAction="#reset" prefHeight="25.0" prefWidth="276.0" text="Reset" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                          <Button fx:id="startButton" mnemonicParsing="false" onAction="#startAnimation" prefHeight="25.0" prefWidth="276.0" text="Start" GridPane.rowIndex="3" />
+                                          <Button fx:id="stopButton" mnemonicParsing="false" onAction="#pauseAnimation" prefHeight="25.0" prefWidth="227.0" text="Stop" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetAnimation" prefHeight="25.0" prefWidth="276.0" text="Reset" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                           <AnchorPane prefHeight="81.0" prefWidth="225.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                              <children>
                                                 <Label fx:id="blueSpeedLabel" layoutX="14.0" layoutY="15.0" text="V m/s" AnchorPane.leftAnchor="14.0">

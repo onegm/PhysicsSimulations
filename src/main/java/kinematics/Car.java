@@ -19,8 +19,8 @@ public class Car {
     private double x, y,
             speedX, speedY,
             accX, accY;
-
-    private AnchorPane pane;
+    private boolean canMove = true;
+    private final AnchorPane pane;
     private ArrayList<Circle> marks;
 
     public Car(Rectangle car){
@@ -51,22 +51,22 @@ public class Car {
                 setAcc(accSlider.getValue(), 0);
             }
         });
-
         setAcc(accSlider.getValue(), 0);
+    }
+
+    public void move(int timeInMillis){
+        if(x + car.getWidth() < pane.getWidth()){
+            setPos(x + speedX*timeInMillis/1000.0, 0);
+            setSpeed(speedX + accX*timeInMillis/1000.0, 0);
+        }
+        else if(canMove){
+            canMove = false;
+        }
     }
 
     public void update(){
         car.setX(x);
         car.setY(y);
-    }
-
-    public void move(int timeInMillis){
-
-        if(x + car.getWidth() < car.getScene().getWidth()){
-            setPos(x + speedX*timeInMillis/1000, y + speedY*timeInMillis/1000);
-            setSpeed(speedX + accX*timeInMillis/1000, speedY + accY*timeInMillis/1000);
-            update();
-        }
     }
 
     public void setSpeed(double speedX, double speedY) {
@@ -102,12 +102,15 @@ public class Car {
         setSpeed(speedSlider.getValue(), 0);
         pane.getChildren().removeAll(marks);
         marks = new ArrayList<>();
+        canMove = true;
     }
 
     public void mark(){
-        Circle circle = new Circle(car.getLayoutX() + x, car.getLayoutY() + car.getHeight()/2, 5.0);
-        pane.getChildren().add(circle);
-        marks.add(circle);
+        if(canMove){
+            Circle circle = new Circle(car.getLayoutX() + x, car.getLayoutY() + car.getHeight()/2, 5.0);
+            pane.getChildren().add(circle);
+            marks.add(circle);
+        }
     }
 
 }
