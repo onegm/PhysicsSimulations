@@ -13,3 +13,20 @@
 .default-color1.chart-line-symbol{
     -fx-background-color: Blue;
 }
+
+
+.default-color2.chart-series-line{
+    -fx-stroke: Red;
+}
+.default-color3.chart-series-line{
+    -fx-stroke: Blue;
+}
+
+.default-color2.chart-line-symbol{
+    -fx-background-color: Red;
+}
+
+.default-color3.chart-line-symbol{
+    -fx-background-color: Blue;
+}
+

@@ -1,9 +1,7 @@
 package kinematics;
 
-import javafx.geometry.Side;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 
 public class Graph extends LineChart<Number, Number> {
@@ -11,7 +9,7 @@ public class Graph extends LineChart<Number, Number> {
 
     public Graph(NumberAxis xAxis, NumberAxis yAxis){
         super(xAxis, yAxis);
-        xAxis.setAutoRanging(true);
+        xAxis.setLabel("Time (s)");
         this.getStylesheets().add("graph.css");
 
         redPosSeries = new XYChart.Series<>();

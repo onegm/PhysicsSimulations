@@ -7,8 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,19 +17,26 @@ import java.util.TimerTask;
 
 public class Controller implements Initializable {
     @FXML
-    private Rectangle redRect, blueRect;
+    private ImageView redCarImage, blueCarImage;
     @FXML
-    AnchorPane posGraphPane, speedGraphPane;
+    private AnchorPane posGraphPane, speedGraphPane;
     @FXML
-    Slider redSpeedSlider, blueSpeedSlider, redAccSlider, blueAccSlider;
+    private Slider redPosSlider, redSpeedSlider,
+            bluePosSlider, blueSpeedSlider,
+            redAccSlider, blueAccSlider;
     @FXML
-    Label redSpeedLabel, blueSpeedLabel, redAccLabel, blueAccLabel;
+    private Label redInitialPosLabel, redPosLabel,
+            blueInitialPosLabel, bluePosLabel,
+            redInitialSpeedLabel, redSpeedLabel,
+            blueInitialSpeedLabel, blueSpeedLabel,
+            redAccLabel, blueAccLabel;
 
     private Car redCar, blueCar;
     private  Timer timer;
     private TimerTask timerTask;
     private long lastMarkTime, timeSinceLastMark;
     private long lastFrameTime;
+    public static long MARK_PERIOD = 1000;
 
     private Graph posGraph, speedGraph;
 
@@ -42,26 +49,25 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        redCar = new Car(redRect);
-        blueCar = new Car(blueRect);
+        redCar = new Car(redCarImage);
+        blueCar = new Car(blueCarImage);
 
-        redCar.setSpeedLabel(redSpeedLabel);
-        blueCar.setSpeedLabel(blueSpeedLabel);
+        redCar.setLabels(redInitialPosLabel, redPosLabel,
+                redInitialSpeedLabel, redSpeedLabel,
+                redAccLabel);
+        blueCar.setLabels(blueInitialPosLabel, bluePosLabel,
+                blueInitialSpeedLabel, blueSpeedLabel,
+                blueAccLabel);
 
-        redCar.setSpeedSlider(redSpeedSlider);
-        blueCar.setSpeedSlider(blueSpeedSlider);
+        redCar.setSliders(redPosSlider, redSpeedSlider, redAccSlider);
+        blueCar.setSliders(bluePosSlider, blueSpeedSlider, blueAccSlider);
 
-        redCar.setAccLabel(redAccLabel);
-        blueCar.setAccLabel(blueAccLabel);
-
-        redCar.setAccSlider(redAccSlider);
-        blueCar.setAccSlider(blueAccSlider);
 
         timer = new Timer();
-        timeSinceLastMark = 1000;
+        timeSinceLastMark = MARK_PERIOD;
 
         posGraph = new Graph(new NumberAxis(), new NumberAxis());
-        posGraph.setTitle("Position");
+        posGraph.setTitle("Position (m)");
         posGraphPane.getChildren().add(posGraph);
         AnchorPane.setBottomAnchor(posGraph, 0d);
         AnchorPane.setTopAnchor(posGraph, 0d);
@@ -69,7 +75,7 @@ public class Controller implements Initializable {
         AnchorPane.setRightAnchor(posGraph, 0d);
 
         speedGraph = new Graph(new NumberAxis(), new NumberAxis());
-        speedGraph.setTitle("Speed");
+        speedGraph.setTitle("Speed (m/s)");
         speedGraphPane.getChildren().add(speedGraph);
         AnchorPane.setBottomAnchor(speedGraph, 0d);
         AnchorPane.setTopAnchor(speedGraph, 0d);
@@ -101,12 +107,12 @@ public class Controller implements Initializable {
                     if(redCar.canMove()){
                         redCar.mark();
                         posGraph.addRed(redCar.getNumOfMarks()-1, redCar.getLastMarkX());
-                        speedGraph.addRed(redCar.getNumOfMarks()-1, redCar.getSpeedX());
+                        speedGraph.addRed(redCar.getNumOfMarks()-1, redCar.getSpeed());
                     }
                     if(blueCar.canMove()){
                         blueCar.mark();
                         posGraph.addBlue(blueCar.getNumOfMarks()-1, blueCar.getLastMarkX());
-                        speedGraph.addBlue(blueCar.getNumOfMarks()-1, blueCar.getSpeedX());
+                        speedGraph.addBlue(blueCar.getNumOfMarks()-1, blueCar.getSpeed());
                     }
 
                     lastMarkTime = System.currentTimeMillis();
@@ -114,7 +120,7 @@ public class Controller implements Initializable {
             }
         };
 
-        timer.scheduleAtFixedRate(timerTask, 1000 - timeSinceLastMark, 1000);
+        timer.scheduleAtFixedRate(timerTask, MARK_PERIOD - timeSinceLastMark, MARK_PERIOD);
     }
 
     public void pauseAnimation(){
@@ -128,7 +134,7 @@ public class Controller implements Initializable {
         posGraph.reset();
         speedGraph.reset();
         animationTimer.stop();
-        timeSinceLastMark = 0;
+        timeSinceLastMark = MARK_PERIOD;
 
         if(timerTask != null)
             timerTask.cancel();
