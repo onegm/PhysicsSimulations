@@ -14,7 +14,10 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         Controller controller = fxmlLoader.getController();
         stage.setTitle("1D Kinematics");
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
         stage.setScene(scene);
+
         stage.show();
 
         stage.setOnCloseRequest(event -> {

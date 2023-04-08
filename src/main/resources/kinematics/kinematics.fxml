@@ -15,11 +15,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="491.0" prefWidth="837.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kinematics.Controller">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kinematics.Controller">
    <children>
-      <SplitPane dividerPositions="0.3946830265848671" orientation="VERTICAL" prefHeight="491.0" prefWidth="837.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.3210702341137124" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane fx:id="carPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
                   <Rectangle fx:id="blueRect" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="30.0" layoutX="14.0" layoutY="51.0" stroke="BLACK" strokeType="INSIDE" width="60.0" />
                   <Rectangle fx:id="redRect" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="30.0" layoutX="14.0" layoutY="100.0" stroke="BLACK" strokeType="INSIDE" width="60.0" />
@@ -31,7 +31,7 @@
                     <tabs>
                       <Tab text="Properties">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <AnchorPane minHeight="0.0" minWidth="0.0">
                                  <children>
                                     <GridPane hgap="10.0" prefHeight="293.0" prefWidth="835.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columnConstraints>
@@ -144,9 +144,18 @@
                         </content>
                       </Tab>
                       <Tab text="Graphs">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.5" prefHeight="374.0" prefWidth="898.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <items>
+                                        <AnchorPane fx:id="posGraphPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                        <AnchorPane fx:id="speedGraphPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                      </items>
+                                    </SplitPane>
+                                 </children>
+                              </AnchorPane>
+                           </content>
                       </Tab>
                     </tabs>
                   </TabPane>

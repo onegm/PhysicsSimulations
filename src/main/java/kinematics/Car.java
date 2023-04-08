@@ -54,9 +54,9 @@ public class Car {
         setAcc(accSlider.getValue(), 0);
     }
 
-    public void move(int timeInMillis){
+    public void move(long timeInMillis){
         if(x + car.getWidth() < pane.getWidth()){
-            setPos(x + speedX*timeInMillis/1000.0, 0);
+            setPos(x + speedX*timeInMillis/1000.0 + 0.5*accX*Math.pow(timeInMillis/1000.0, 2), 0);
             setSpeed(speedX + accX*timeInMillis/1000.0, 0);
         }
         else if(canMove){
@@ -91,6 +91,10 @@ public class Car {
         update();
     }
 
+    public double getX(){
+        return x;
+    }
+
     public void setAcc(double accX, double accY) {
         this.accX = accX;
         this.accY = accY;
@@ -106,11 +110,24 @@ public class Car {
     }
 
     public void mark(){
-        if(canMove){
-            Circle circle = new Circle(car.getLayoutX() + x, car.getLayoutY() + car.getHeight()/2, 5.0);
-            pane.getChildren().add(circle);
-            marks.add(circle);
-        }
+        Circle circle = new Circle(car.getLayoutX() + x, car.getLayoutY() + car.getHeight()/2, 5.0);
+        pane.getChildren().add(circle);
+        marks.add(circle);
     }
 
+    public int getNumOfMarks(){
+        return marks.size();
+    }
+
+    public double getLastMarkX(){
+        return marks.get(marks.size() - 1).getCenterX() - car.getLayoutX();
+    }
+
+    public boolean canMove() {
+        return canMove;
+    }
+
+    public double getSpeedX() {
+        return speedX;
+    }
 }
