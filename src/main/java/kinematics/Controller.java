@@ -32,6 +32,9 @@ public class Controller implements Initializable {
             redAccLabel, blueAccLabel;
 
     private Car redCar, blueCar;
+
+    private CarController redCarController, blueCarController;
+    private Marker redMarker, blueMarker;
     private  Timer timer;
     private TimerTask timerTask;
     private long lastMarkTime, timeSinceLastMark;
@@ -49,18 +52,24 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         redCar = new Car(redCarImage);
         blueCar = new Car(blueCarImage);
 
-        redCar.setLabels(redInitialPosLabel, redPosLabel,
+        redMarker = new Marker(redCar);
+        blueMarker = new Marker(blueCar);
+
+        redCarController = new CarController(redCar);
+        redCarController.setLabels(redInitialPosLabel, redPosLabel,
                 redInitialSpeedLabel, redSpeedLabel,
                 redAccLabel);
-        blueCar.setLabels(blueInitialPosLabel, bluePosLabel,
+        redCarController.setSliders(redPosSlider, redSpeedSlider, redAccSlider);
+
+        blueCarController = new CarController(blueCar);
+        blueCarController.setLabels(blueInitialPosLabel, bluePosLabel,
                 blueInitialSpeedLabel, blueSpeedLabel,
                 blueAccLabel);
-
-        redCar.setSliders(redPosSlider, redSpeedSlider, redAccSlider);
-        blueCar.setSliders(bluePosSlider, blueSpeedSlider, blueAccSlider);
+        blueCarController.setSliders(bluePosSlider, blueSpeedSlider, blueAccSlider);
 
 
         timer = new Timer();
@@ -87,8 +96,8 @@ public class Controller implements Initializable {
 
         long timeNow = System.currentTimeMillis();
         long elapsedTime = timeNow - lastFrameTime;
-        redCar.move(elapsedTime);
-        blueCar.move(elapsedTime);
+        redCarController.move(elapsedTime);
+        blueCarController.move(elapsedTime);
 
         lastFrameTime = timeNow;
 
@@ -105,14 +114,14 @@ public class Controller implements Initializable {
                 Platform.runLater(() -> {
                     //update UI thread from here.
                     if(redCar.canMove()){
-                        redCar.mark();
-                        posGraph.addRed(redCar.getNumOfMarks()-1, redCar.getLastMarkX());
-                        speedGraph.addRed(redCar.getNumOfMarks()-1, redCar.getSpeed());
+                        redMarker.mark();
+                        posGraph.addRed(redMarker.getNumOfMarks()-1, redMarker.getLastMarkX());
+                        speedGraph.addRed(redMarker.getNumOfMarks()-1, redCar.getSpeed());
                     }
                     if(blueCar.canMove()){
-                        blueCar.mark();
-                        posGraph.addBlue(blueCar.getNumOfMarks()-1, blueCar.getLastMarkX());
-                        speedGraph.addBlue(blueCar.getNumOfMarks()-1, blueCar.getSpeed());
+                        blueMarker.mark();
+                        posGraph.addBlue(blueMarker.getNumOfMarks()-1, blueMarker.getLastMarkX());
+                        speedGraph.addBlue(blueMarker.getNumOfMarks()-1, blueCar.getSpeed());
                     }
 
                     lastMarkTime = System.currentTimeMillis();
@@ -125,12 +134,16 @@ public class Controller implements Initializable {
 
     public void pauseAnimation(){
         animationTimer.stop();
-        timerTask.cancel();
+
+        if(timerTask != null)
+            timerTask.cancel();
     }
 
     public void resetAnimation(){
-        redCar.reset();
-        blueCar.reset();
+        redCarController.reset();
+        blueCarController.reset();
+        redMarker.reset();
+        blueMarker.reset();
         posGraph.reset();
         speedGraph.reset();
         animationTimer.stop();

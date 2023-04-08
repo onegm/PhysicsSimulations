@@ -5,4 +5,8 @@ module kinematics.physicssimulations {
 
     opens kinematics to javafx.fxml;
     exports kinematics;
+
+    opens oneDimensionalKinematics to javafx.fxml;
+    exports oneDimensionalKinematics;
+
 }
