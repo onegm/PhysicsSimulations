@@ -1,13 +1,13 @@
 package oneDimensionalKinematics.model;
 
+import javafx.util.Pair;
+
 public class Car {
-    private double x, speed, acc;
-    private boolean canMove = true;
+    private Pair<Double, Double> location = new Pair<>(0.0, 0.0);
+    private double speed, acc;
 
-    public Car(){}
-
-    public void setPos(double x){
-        this.x = x;
+    public void setLocation(Pair<Double, Double> newLocation){
+        this.location = newLocation;
     }
 
     public void setSpeed(double speed) {
@@ -19,7 +19,10 @@ public class Car {
     }
 
     public double getX(){
-        return x;
+        return location.getKey();
+    }
+    public double getY(){
+        return location.getValue();
     }
 
     public double getSpeed() {
@@ -30,15 +33,8 @@ public class Car {
         return acc;
     }
 
-    public boolean canMove() {
-        return canMove;
-    }
-
-    public void setCanMove(boolean b){
-        canMove = b;
-    }
-
-    public void move(long time){
-        x += speed*time + 0.5*acc*Math.pow(time, 2);
+    public void step(double timeInSec){
+        double x = this.getX() + this.getSpeed()*timeInSec + 0.5*this.getAcc()*Math.pow(timeInSec, 2);
+        this.location = new Pair<>(x, this.getY());
     }
 }

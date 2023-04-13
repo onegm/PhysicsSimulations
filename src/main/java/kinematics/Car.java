@@ -2,7 +2,6 @@ package kinematics;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import kinematics.Marker;
 
 public class Car {
     private final ImageView car;
