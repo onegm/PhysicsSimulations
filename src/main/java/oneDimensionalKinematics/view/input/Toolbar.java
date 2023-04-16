@@ -1,17 +1,18 @@
-package oneDimensionalKinematics.view;
+package oneDimensionalKinematics.view.input;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
-import oneDimensionalKinematics.viewModel.ApplicationState;
-import oneDimensionalKinematics.viewModel.ApplicationViewModel;
+import oneDimensionalKinematics.util.event.ApplicationStateEvent;
+import oneDimensionalKinematics.util.event.EventBus;
+
+import static oneDimensionalKinematics.util.event.ApplicationStateEvent.Type.*;
 
 public class Toolbar extends ToolBar {
-    private final ApplicationViewModel appViewModel;
+    private final EventBus eventBus;
 
-    public Toolbar(ApplicationViewModel appViewModel){
-        this.appViewModel = appViewModel;
+    public Toolbar(EventBus eventBus){
+        this.eventBus = eventBus;
 
         Button start = new Button("Start");
         start.setOnAction(actionEvent -> handleStart());
@@ -28,9 +29,10 @@ public class Toolbar extends ToolBar {
         AnchorPane.setLeftAnchor(this, 0d);
     }
 
+    private void handleStart() {eventBus.emit(new ApplicationStateEvent(START));}
+    private void handlePause() {eventBus.emit(new ApplicationStateEvent(PAUSE));}
     private void handleReset() {
-        appViewModel.setState(ApplicationState.READY);
+        eventBus.emit(new ApplicationStateEvent(RESET));
     }
-    private void handlePause() {appViewModel.setState(ApplicationState.PAUSED);}
-    private void handleStart() {appViewModel.setState(ApplicationState.RUNNING);}
+
 }

@@ -4,7 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import oneDimensionalKinematics.util.Animatable;
-import oneDimensionalKinematics.viewModel.ApplicationState;
+import oneDimensionalKinematics.util.event.ApplicationStateEvent;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,17 +24,17 @@ public class TimelineController{
         this.listeners = new LinkedList<>();
     }
 
-    public void onAppStateChanged(ApplicationState state) {
-        if (state == ApplicationState.RUNNING) {
-            this.timeOfLastFrame = System.currentTimeMillis();
-            this.timeline.play();
-        }
-        else if(state == ApplicationState.PAUSED){
-            this.timeline.stop();
-        }
-        else if (state == ApplicationState.READY) {
-            this.timeline.stop();
-            listeners.forEach(Animatable::reset);
+    public void handle(ApplicationStateEvent event) {
+        switch (event.getEventType()) {
+            case START -> {
+                this.timeOfLastFrame = System.currentTimeMillis();
+                this.timeline.play();
+            }
+            case PAUSE, END -> this.timeline.stop();
+            case RESET -> {
+                this.timeline.stop();
+                listeners.forEach(Animatable::reset);
+            }
         }
     }
 
@@ -46,5 +46,9 @@ public class TimelineController{
 
     public void addListeners(List<Animatable> newListeners){
         listeners.addAll(newListeners);
+    }
+
+    public void addListener(Animatable listener) {
+        listeners.add(listener);
     }
 }

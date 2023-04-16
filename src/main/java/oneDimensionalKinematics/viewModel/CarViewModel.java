@@ -1,32 +1,49 @@
 package oneDimensionalKinematics.viewModel;
 
-import javafx.util.Pair;
-import oneDimensionalKinematics.model.Car;
+import oneDimensionalKinematics.util.Property;
 import oneDimensionalKinematics.util.Animatable;
-import oneDimensionalKinematics.view.CarView;
 
 public class CarViewModel implements Animatable {
-    private final Car car;
-    private final CarView carView;
-    public CarViewModel(CarView carView){
-        this.car = new Car();
-        this.carView = carView;
+    private final Property<Double> x = new Property<>(0d);
+    private final Property<Double> speed = new Property<>(0d);
+    private final Property<Double> acc = new Property<>(0d);
+    private final Property<Double> initialX = new Property<>(0d);
+    private final Property<Double> initialSpeed = new Property<>(0d);
 
-        this.car.setSpeed(30);
+    public CarViewModel(){
+        this.getInitialX().addListener(this.getX()::setValue);
+        this.getInitialSpeed().addListener(this.getSpeed()::setValue);
+    }
+    public Property<Double> getX() {
+        return x;
+    }
+    public Property<Double> getSpeed() {
+        return speed;
+    }
+    public Property<Double> getAcc() {
+        return acc;
+    }
+    public Property<Double> getInitialX() {
+        return initialX;
+    }
+
+    public Property<Double> getInitialSpeed() {
+        return initialSpeed;
     }
 
     public void doStep(double timeInSec){
-        car.step(timeInSec);
-        carView.setLocation(car.getX(), car.getY());
+        x.setValue(step(timeInSec));
     }
 
     public void reset() {
-        car.setLocation(new Pair<>(0d, 0d));
-        carView.setLocation(0d, 0d);
+        x.setValue(initialX.getValue());
     }
 
-    public Pair<Double, Double> getCenterLocation(){
-        return new Pair<>(carView.getLayoutX() + carView.getX(),
-                carView.getLayoutY() + carView.getY() + carView.getFitHeight()/2);
+    public double step(double timeInSec){
+        double newX = x.getValue() + speed.getValue()*timeInSec + 0.5*acc.getValue()*Math.pow(timeInSec, 2);
+        double newSpeed = speed.getValue() + acc.getValue()*timeInSec;
+        x.setValue(newX);
+        speed.setValue(newSpeed);
+        return newX;
     }
 }
