@@ -1,7 +1,6 @@
 package oneDimensionalKinematics.view;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
@@ -11,7 +10,9 @@ public class InfoBar extends VBox {
 
     public InfoBar(){
         this.positionLabel = new PropertyLabel("m");
+        this.positionLabel.setFormattedLabel("Position: " + this.positionLabel.getFormattedLabel());
         this.velocityLabel = new PropertyLabel("m/s");
+        this.velocityLabel.setFormattedLabel("Velocity: " + this.velocityLabel.getFormattedLabel());
 
         this.setPadding(new Insets(10, 30, 10, 30));
         this.setSpacing(20);
@@ -20,6 +21,7 @@ public class InfoBar extends VBox {
         this.velocityLabel.setTextAlignment(TextAlignment.LEFT);
         this.getChildren().addAll(positionLabel, velocityLabel);
     }
+
 
     public PropertyLabel getPositionLabel(){
         return  positionLabel;

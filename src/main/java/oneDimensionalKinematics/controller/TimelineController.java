@@ -13,39 +13,49 @@ public class TimelineController{
     private final Timeline timeline;
     private final List<Animatable> listeners;
     private long timeOfLastFrame = System.currentTimeMillis();
+    private long timeSinceLastFrame;
+    private final double frameRateInMillis;
 
 
-    public TimelineController(){
-        double FRAME_RATE = 1.0 / 60.0*1000;
-
-        this.timeline = new Timeline(new KeyFrame(Duration.millis(FRAME_RATE), event -> this.notifyListeners()));
+    public TimelineController(double frameRateInMillis){
+        this.timeline = new Timeline(new KeyFrame(Duration.millis(frameRateInMillis), event -> this.notifyListeners()));
+        this.timeline.setDelay(Duration.ZERO);
+        this.frameRateInMillis = frameRateInMillis;
         this.timeline.setCycleCount(Timeline.INDEFINITE);
+        this.timeSinceLastFrame = (long) frameRateInMillis;
 
         this.listeners = new LinkedList<>();
     }
 
     public void handle(ApplicationStateEvent event) {
         switch (event.getEventType()) {
-            case START -> {
-                this.timeOfLastFrame = System.currentTimeMillis();
-                this.timeline.play();
-            }
-            case PAUSE, END -> this.timeline.stop();
-            case RESET -> {
-                this.timeline.stop();
-                listeners.forEach(Animatable::reset);
-            }
+            case START -> start();
+            case PAUSE -> this.timeline.pause();
+            case END -> stop();
+            case RESET -> reset();
         }
     }
 
-    private void notifyListeners() {
-        double timeSinceLastFrame = (double)(System.currentTimeMillis() - timeOfLastFrame) / 1000.0;
-        listeners.forEach(listener -> listener.doStep(timeSinceLastFrame));
-        timeOfLastFrame = System.currentTimeMillis();
+    private void start() {
+        this.timeOfLastFrame = System.currentTimeMillis();
+        this.timeline.play();
     }
 
-    public void addListeners(List<Animatable> newListeners){
-        listeners.addAll(newListeners);
+    private void stop() {
+        this.timeline.stop();
+        timeSinceLastFrame = System.currentTimeMillis() - timeOfLastFrame;
+    }
+
+    private void reset() {
+        this.timeline.stop();
+        listeners.forEach(Animatable::reset);
+        timeSinceLastFrame = (long) frameRateInMillis;
+    }
+
+    private void notifyListeners() {
+        timeSinceLastFrame = System.currentTimeMillis() - timeOfLastFrame;
+        listeners.forEach(listener -> listener.doStep(timeSinceLastFrame / 1000d));
+        timeOfLastFrame = System.currentTimeMillis();
     }
 
     public void addListener(Animatable listener) {

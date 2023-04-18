@@ -37,6 +37,7 @@ public class CarViewModel implements Animatable {
 
     public void reset() {
         x.setValue(initialX.getValue());
+        speed.setValue(initialSpeed.getValue());
     }
 
     public double step(double timeInSec){

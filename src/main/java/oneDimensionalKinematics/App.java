@@ -1,12 +1,18 @@
 package oneDimensionalKinematics;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import oneDimensionalKinematics.controller.PropertyData;
 import oneDimensionalKinematics.controller.TimelineController;
+import oneDimensionalKinematics.model.Graph;
 import oneDimensionalKinematics.util.event.ApplicationStateEvent;
 import oneDimensionalKinematics.util.event.EventBus;
 import oneDimensionalKinematics.view.*;
@@ -24,13 +30,16 @@ public class App extends Application {
         EventBus eventBus = new EventBus();
         Toolbar toolbar = new Toolbar(eventBus);
 
-        TimelineController timelineController = new TimelineController();
-        eventBus.addListener(ApplicationStateEvent.class, timelineController::handle);
+        TimelineController timelineController60 = new TimelineController(1.0/60*1000);
+        eventBus.addListener(ApplicationStateEvent.class, timelineController60::handle);
+
+        TimelineController timelineController1 = new TimelineController(1000);
+        eventBus.addListener(ApplicationStateEvent.class, timelineController1::handle);
 
         CarViewModel redCarViewModel = new CarViewModel();
         CarViewModel blueCarViewModel = new CarViewModel();
-        timelineController.addListener(redCarViewModel);
-        timelineController.addListener(blueCarViewModel);
+        timelineController60.addListener(redCarViewModel);
+        timelineController60.addListener(blueCarViewModel);
 
         CarView redCarView = new CarView(new Image(getClass().getResource("redCar.png").toString()));
         CarView blueCarView = new CarView(new Image(getClass().getResource("blueCar.png").toString()));
@@ -42,7 +51,7 @@ public class App extends Application {
         MarkerViewModel markerViewModel= new MarkerViewModel(markerView);
         markerViewModel.addCarView(redCarView);
         markerViewModel.addCarView(blueCarView);
-        timelineController.addListener(markerViewModel);
+        eventBus.addListener(ApplicationStateEvent.class, markerViewModel::handle);
 
         SimulationPane simulationPane = new SimulationPane();
         simulationPane.getChildren().addAll(markerView, redCarView, blueCarView);
@@ -102,13 +111,61 @@ public class App extends Application {
         infoPane.getChildren().forEach(child -> PropertyPane.setHgrow(child, Priority.ALWAYS));
 
         PropertiesTab propertiesTab = new PropertiesTab("Properties");
+        Label initPositionLabel = new Label("Initial Position");
+        initPositionLabel.setFont(new Font("Arial Bold", 24));
+        propertiesTab.addChild(initPositionLabel);
         propertiesTab.addChild(positionPane);
+        Label initVelocityLabel = new Label("Initial Velocity");
+        initVelocityLabel.setFont(new Font("Arial Bold", 24));
+        propertiesTab.addChild(initVelocityLabel);
         propertiesTab.addChild(velocityPane);
+        Label initAccelerationLabel = new Label("Initial Acceleration");
+        initAccelerationLabel.setFont(new Font("Arial Bold", 24));
+        propertiesTab.addChild(initAccelerationLabel);
         propertiesTab.addChild(accelerationPane);
         propertiesTab.addChild(infoPane);
 
+
+
         Tab graphsTab = new Tab("Graphs");
         graphsTab.setClosable(false);
+        HBox graphsPane = new HBox();
+        graphsTab.setContent(graphsPane);
+        graphsPane.setSpacing(100);
+        graphsPane.setPadding(new Insets(10, 30, 10, 30));
+
+        Graph positionGraph = new Graph("Position (m)");
+        Graph velocityGraph = new Graph("Velocity (m/s)");
+        graphsPane.getChildren().addAll(positionGraph, velocityGraph);
+        graphsPane.getChildren().forEach(child -> HBox.setHgrow(child, Priority.ALWAYS));
+        eventBus.addListener(ApplicationStateEvent.class, positionGraph::handle);
+        eventBus.addListener(ApplicationStateEvent.class, velocityGraph::handle);
+
+        PropertyData redPositionSeries = new PropertyData(redCarViewModel.getX());
+        eventBus.addListener(ApplicationStateEvent.class, redPositionSeries::handle);
+        timelineController1.addListener(redPositionSeries::addData);
+        redPositionSeries.addListener(markerViewModel::mark);
+        positionGraph.addSeries(redPositionSeries.getSeries());
+
+        PropertyData bluePositionSeries = new PropertyData(blueCarViewModel.getX());
+        eventBus.addListener(ApplicationStateEvent.class, bluePositionSeries::handle);
+        timelineController1.addListener(bluePositionSeries::addData);
+        bluePositionSeries.addListener(markerViewModel::mark);
+        positionGraph.addSeries(bluePositionSeries.getSeries());
+
+
+        PropertyData redVelocitySeries = new PropertyData(redCarViewModel.getSpeed());
+        eventBus.addListener(ApplicationStateEvent.class, redVelocitySeries::handle);
+        timelineController1.addListener(redVelocitySeries::addData);
+        redVelocitySeries.addListener(markerViewModel::mark);
+        velocityGraph.addSeries(redVelocitySeries.getSeries());
+
+        PropertyData blueVelocitySeries = new PropertyData(blueCarViewModel.getSpeed());
+        eventBus.addListener(ApplicationStateEvent.class, blueVelocitySeries::handle);
+        timelineController1.addListener(blueVelocitySeries::addData);
+        blueVelocitySeries.addListener(markerViewModel::mark);
+        velocityGraph.addSeries(blueVelocitySeries.getSeries());
+
 
         ControlsPane controlsPane = new ControlsPane();
         controlsPane.getTabs().addAll(propertiesTab, graphsTab);

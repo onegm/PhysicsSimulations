@@ -1,7 +1,9 @@
 package oneDimensionalKinematics.view;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class PropertiesTab extends Tab {
@@ -16,5 +18,7 @@ public class PropertiesTab extends Tab {
 
     public void addChild(Node node){
         vBox.getChildren().add(node);
+        vBox.setAlignment(Pos.CENTER);
+        VBox.setVgrow(node, Priority.ALWAYS);
     }
 }
