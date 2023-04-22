@@ -5,7 +5,7 @@ public class ApplicationStateEvent implements Event{
     public enum Type{
         START,
         PAUSE,
-        END,
+        START_AGAIN,
         RESET
     }
 

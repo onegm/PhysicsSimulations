@@ -1,24 +1,39 @@
 package oneDimensionalKinematics.view.simulation;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
-import java.util.ArrayList;
+import javafx.scene.text.Text;
 
 public class MarkerView extends Pane {
-    private ArrayList<Circle> circles = new ArrayList<>();
     public static final double MARK_SIZE = 5.0;
+    private static final String formattedLabel = "X: %.1f\nV: %.1f\nT: %.1f";
 
-    public void mark(double x, double y){
+
+    public void mark(double x, double y, double speed, double time){
         Circle circle = new Circle(x, y, MARK_SIZE);
-        circle.setOnMouseEntered(event -> circle.setRadius(MARK_SIZE*2));
-        circle.setOnMouseExited(event -> circle.setRadius(MARK_SIZE));
-        this.getChildren().add(circle);
-        circles.add(circle);
+
+
+        Text text = new Text(x - MARK_SIZE*4, y + MARK_SIZE*5, String.format(formattedLabel, x, speed, time));
+        text.setFill(Color.TRANSPARENT);
+        circle.setOnMouseEntered(event -> mouseEntered(circle, text));
+        circle.setOnMouseExited(event -> mouseExited(circle, text));
+
+        this.getChildren().addAll(circle, text);
+    }
+
+    private static void mouseExited(Circle circle, Text text) {
+        circle.setRadius(MARK_SIZE);
+        text.setFill(Color.TRANSPARENT);
+    }
+
+    private static void mouseEntered(Circle circle, Text text) {
+        circle.setRadius(MARK_SIZE*2);
+        text.setFill(Color.BLACK);
+
     }
 
     public void reset(){
-        this.getChildren().removeAll(circles);
-        circles = new ArrayList<>();
+        this.getChildren().clear();
     }
 }

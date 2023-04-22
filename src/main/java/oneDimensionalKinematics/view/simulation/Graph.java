@@ -1,4 +1,4 @@
-package oneDimensionalKinematics.model;
+package oneDimensionalKinematics.view.simulation;
 
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
@@ -30,11 +30,9 @@ public class Graph extends LineChart<Number, Number> {
         this.getData().add(series);
     }
     public void reset(){
-//        this.getData().clear();
         for (Series<Number, Number> series : seriesList) {
             series.getData().clear();
         }
-//        seriesList = new LinkedList<>();
     }
 
     public void handle(ApplicationStateEvent event) {

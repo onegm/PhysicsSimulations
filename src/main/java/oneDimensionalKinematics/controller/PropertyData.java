@@ -25,14 +25,6 @@ public class PropertyData {
         currentTime += timeSinceLastFrame;
         XYChart.Data<Number, Number> propertyData = new XYChart.Data<>(currentTime, property.getValue());
         series.getData().add(propertyData);
-        notifyListeners();
-    }
-
-    public void addListener(SimpleChangeListener<Double> listener){
-        this.listeners.add(listener);
-    }
-    private void notifyListeners() {
-        listeners.forEach(listener -> listener.valueChanged(property.getValue()));
     }
 
     public XYChart.Series<Number, Number> getSeries() {
@@ -41,8 +33,11 @@ public class PropertyData {
 
     public void handle(ApplicationStateEvent event){
         if(event.getEventType() == ApplicationStateEvent.Type.RESET){
-            series.getData().removeAll();
+            series.getData().clear();
             currentTime = 0d;
+        }
+        if(event.getEventType() == ApplicationStateEvent.Type.START){
+            addData(0);
         }
     }
 }

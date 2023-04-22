@@ -1,5 +1,6 @@
 package oneDimensionalKinematics.view;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
@@ -12,6 +13,8 @@ public class PropertyLabel extends Label {
         this.units = units;
         this.setText(String.format(formattedLabel, value, units));
         this.setFont(new Font("Arial", 24));
+        this.setMinWidth(100);
+        this.setAlignment(Pos.CENTER);
     }
 
     public void setValue(double newValue){

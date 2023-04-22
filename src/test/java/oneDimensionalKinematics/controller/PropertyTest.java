@@ -2,16 +2,11 @@ package oneDimensionalKinematics.controller;
 
 import oneDimensionalKinematics.util.Property;
 import oneDimensionalKinematics.util.SimpleChangeListener;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PropertyTest {
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void constructWithInitialValue() {

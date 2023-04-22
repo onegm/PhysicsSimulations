@@ -3,7 +3,7 @@ package oneDimensionalKinematics.view.input;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
-import oneDimensionalKinematics.util.event.ApplicationStateEvent;
+import oneDimensionalKinematics.util.event.ApplicationStateRequest;
 import oneDimensionalKinematics.util.event.EventBus;
 
 import static oneDimensionalKinematics.util.event.ApplicationStateEvent.Type.*;
@@ -29,10 +29,13 @@ public class Toolbar extends ToolBar {
         AnchorPane.setLeftAnchor(this, 0d);
     }
 
-    private void handleStart() {eventBus.emit(new ApplicationStateEvent(START));}
-    private void handlePause() {eventBus.emit(new ApplicationStateEvent(PAUSE));}
+    private void handleStart() {
+        eventBus.emit(new ApplicationStateRequest(START));
+    }
+    private void handlePause() {
+        eventBus.emit(new ApplicationStateRequest(PAUSE));}
     private void handleReset() {
-        eventBus.emit(new ApplicationStateEvent(RESET));
+        eventBus.emit(new ApplicationStateRequest(RESET));
     }
 
 }

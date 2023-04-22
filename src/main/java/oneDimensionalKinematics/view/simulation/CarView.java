@@ -7,9 +7,9 @@ public class CarView extends ImageView {
     private static int numOfCars;
     public CarView(Image image){
         this.setImage(image);
-        this.setFitWidth(70);
-        this.setFitHeight(40);
-        this.setLayoutY(70*(numOfCars));
+        this.setFitWidth(84);
+        this.setFitHeight(48);
+        this.setY(90*(numOfCars) + 10);
         this.setLayoutX(20);
         numOfCars += 1;
     }
