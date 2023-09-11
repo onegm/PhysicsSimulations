@@ -1,7 +1,7 @@
 package oneDimensionalKinematics.controller;
 
-import oneDimensionalKinematics.util.Property;
-import oneDimensionalKinematics.util.SimpleChangeListener;
+import util.Property;
+import util.SimpleChangeListener;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

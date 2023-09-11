@@ -2,6 +2,9 @@ package oneDimensionalKinematics.util.event;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import util.event.Event;
+import util.event.EventBus;
+import util.event.EventListener;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,7 +54,7 @@ class EventBusTest {
         assertFalse(helloListener.listenerCalled);
     }
 
-    private static class TestEventListener<T extends Event> implements EventListener<T>{
+    private static class TestEventListener<T extends Event> implements EventListener<T> {
         boolean listenerCalled = false;
 
         @Override

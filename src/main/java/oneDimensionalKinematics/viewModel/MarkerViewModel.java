@@ -1,8 +1,8 @@
 package oneDimensionalKinematics.viewModel;
 
-import oneDimensionalKinematics.util.event.ApplicationStateEvent;
-import oneDimensionalKinematics.view.simulation.CarView;
-import oneDimensionalKinematics.view.simulation.MarkerView;
+import util.event.ApplicationStateEvent;
+import oneDimensionalKinematics.view.CarView;
+import oneDimensionalKinematics.view.MarkerView;
 
 
 public class MarkerViewModel  {

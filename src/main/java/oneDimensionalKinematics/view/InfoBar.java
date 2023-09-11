@@ -3,6 +3,7 @@ package oneDimensionalKinematics.view;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import view.PropertyLabel;
 
 public class InfoBar extends VBox {
     private final PropertyLabel positionLabel;

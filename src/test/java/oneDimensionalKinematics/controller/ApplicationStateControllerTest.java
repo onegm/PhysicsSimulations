@@ -1,8 +1,9 @@
 package oneDimensionalKinematics.controller;
 
-import oneDimensionalKinematics.util.event.ApplicationStateEvent;
-import oneDimensionalKinematics.util.event.ApplicationStateRequest;
-import oneDimensionalKinematics.util.event.EventBus;
+import controller.ApplicationStateController;
+import util.event.ApplicationStateEvent;
+import util.event.ApplicationStateRequest;
+import util.event.EventBus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package oneDimensionalKinematics.viewModel;
 
-import oneDimensionalKinematics.util.Property;
-import oneDimensionalKinematics.util.Animatable;
+import util.Property;
+import util.Animatable;
 
 public class CarViewModel implements Animatable {
     private final Property<Double> x = new Property<>(0d);
