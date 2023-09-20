@@ -17,7 +17,7 @@ import view.MainView;
 import view.PropertiesTab;
 import view.input.Toolbar;
 import view.simulation.SimulationPane;
-import viewModels.PhysicalObject;
+import model.PhysicalObject;
 
 public class ProjectileMotionApp extends Application {
     @Override
@@ -43,9 +43,9 @@ public class ProjectileMotionApp extends Application {
 
         PhysicalObject ball = new PhysicalObject();
         eventBus.addListener(ApplicationStateEvent.class, ball::handle);
-        ball.getXSpeed().setValue(-10.0);
-        ball.getYSpeed().setValue(20.0);
-        ball.getYAcc().setValue(-9.8);
+        ball.getSpeedX().setValue(-10.0);
+        ball.getSpeedY().setValue(20.0);
+        ball.getAccY().setValue(-9.8);
         timelineController60.addListener(ball);
 
 

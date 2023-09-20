@@ -5,11 +5,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import view.PropertyLabel;
 
-public class InfoBar extends VBox {
+public class CarInfoBar extends VBox {
     private final PropertyLabel positionLabel;
     private final PropertyLabel velocityLabel;
 
-    public InfoBar(){
+    public CarInfoBar(){
         this.positionLabel = new PropertyLabel("m");
         this.positionLabel.setFormattedLabel("Position: " + this.positionLabel.getFormattedLabel());
         this.velocityLabel = new PropertyLabel("m/s");

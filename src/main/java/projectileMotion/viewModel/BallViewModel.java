@@ -1,6 +1,6 @@
 package projectileMotion.viewModel;
 
-import viewModels.PhysicalObject;
+import model.PhysicalObject;
 
 public class BallViewModel extends PhysicalObject {
 
